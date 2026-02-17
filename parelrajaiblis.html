@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ngetes Doang</title>
+
+<style>
+body {
+  margin: 0;
+  background: black;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: white;
+  overflow: hidden;
+}
+
+/* HALAMAN UTAMA */
+#mainPage {
+  margin-top: 100px;
+}
+
+button {
+  padding: 15px 25px;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+/* COUNTDOWN */
+#countdownLayer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 120px;
+  font-weight: bold;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+  z-index: 9998;
+}
+
+#countdownLayer.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* FOTO INDAH (LEBIH KECIL & IMUT) */
+#beautiful {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.5s;
+  z-index: 9997;
+}
+
+#beautiful.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+#beautiful img {
+  width: 300px;          /* UBAH UKURAN DI SINI */
+  border-radius: 25px;   /* Biar imut */
+  box-shadow: 0 0 30px white;
+  animation: cuteFloat 2s ease-in-out infinite alternate;
+}
+
+/* Animasi mengambang lucu */
+@keyframes cuteFloat {
+  from { transform: scale(1) translateY(0); }
+  to { transform: scale(1.05) translateY(-10px); }
+}
+
+/* JUMPSCARE */
+#jumpscare {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s;
+  z-index: 9999;
+}
+
+#jumpscare.active {
+  opacity: 1;
+  visibility: visible;
+  animation: shake 0.1s infinite;
+}
+
+#jumpscare img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* FLASH CEPAT */
+#flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+#flash.active {
+  animation: flashBlink 0.06s infinite; /* lebih cepat */
+}
+
+@keyframes flashBlink {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-10px, 5px); }
+  50% { transform: translate(10px, -5px); }
+  75% { transform: translate(-5px, -10px); }
+  100% { transform: translate(0, 0); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="mainPage">
+  <h1>Hanya Website Biasa 😇</h1>
+
+  <button id="btn1" onclick="nextStep(1)">
+    Klik Ini Jika Kamu Raja Iblis!
+  </button>
+
+  <button id="btn2" style="display:none;" onclick="nextStep(2)">
+    Kamu Yakin?
+  </button>
+
+  <button id="btn3" style="display:none;" onclick="startSequence()">
+    Peringatan Terakhir!
+  </button>
+</div>
+
+<div id="countdownLayer">
+  <span id="countdownNumber"></span>
+</div>
+
+<div id="beautiful">
+  <img src="https://i.pinimg.com/736x/1c/21/c7/1c21c74c23ef9cfb525a7103bf66839c.jpg">
+</div>
+
+<div id="jumpscare">
+  <img src="https://i.pinimg.com/736x/47/fb/73/47fb739b2cc5fc89016c971a7883901a.jpg">
+</div>
+
+<div id="flash"></div>
+
+<audio id="scream" src="c:\Users\ASUS\Downloads\jumpscare.mp3.mp3"></audio>
+
+<script>
+function openFullscreen() {
+  let elem = document.documentElement;
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    elem.msRequestFullscreen();
+  }
+}
+
+function nextStep(step) {
+  if (step === 1) {
+    btn1.style.display = "none";
+    btn2.style.display = "inline-block";
+  }
+  if (step === 2) {
+    btn2.style.display = "none";
+    btn3.style.display = "inline-block";
+  }
+}
+
+function startSequence() {
+
+  openFullscreen();
+
+  let main = document.getElementById("mainPage");
+  let countdownLayer = document.getElementById("countdownLayer");
+  let countdownNumber = document.getElementById("countdownNumber");
+  let beautiful = document.getElementById("beautiful");
+  let js = document.getElementById("jumpscare");
+  let flash = document.getElementById("flash");
+  let sound = document.getElementById("scream");
+
+  main.style.display = "none";
+  countdownLayer.classList.add("active");
+
+  let count = 5;
+  countdownNumber.innerText = count;
+
+  let interval = setInterval(function() {
+    count--;
+    countdownNumber.innerText = count;
+
+    if (count <= 0) {
+      clearInterval(interval);
+      countdownLayer.classList.remove("active");
+
+      beautiful.classList.add("active");
+
+      setTimeout(function() {
+
+        beautiful.classList.remove("active");
+
+        js.classList.add("active");
+        flash.classList.add("active");
+
+        sound.volume = 1.0;
+        sound.currentTime = 0;
+        sound.play().catch(()=>{});
+
+        setTimeout(function() {
+          js.classList.remove("active");
+          flash.classList.remove("active");
+          beautiful.classList.add("active");
+        }, 4000);
+
+      }, 3000);
+    }
+
+  }, 1000);
+}
+</script>
+
+</body>
+</html>
